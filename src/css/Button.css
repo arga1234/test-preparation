@@ -1,8 +1,7 @@
 /* General button styles */
 button {
-    padding: 10px 20px;
+    padding: 6px 10px;
     font-size: 14px;
-    font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -45,11 +44,11 @@ button {
   
   /* Danger Button */
   .danger {
-    background-color: #dc3545;
+    background-color: red;
     color: white;
   }
   
   .danger:hover {
-    background-color: #c82333;
+    background-color: rgb(214, 4, 4);
   }
   

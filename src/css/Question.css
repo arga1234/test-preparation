@@ -3,7 +3,6 @@
     border-radius: 8px;
     padding: 16px;
     margin: 16px 0;
-    background-color: #f9f9f9;
   }
   
   .question-card h2 {
@@ -26,8 +25,6 @@
   
   .option {
     padding: 8px 16px;
-    background-color: #e0e0e0;
-    border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
   }
@@ -48,18 +45,33 @@
   .selected-option:hover {
     background-color: #45a049;
   }
+
+  .incorrect-option {
+    padding: 8px 16px;
+    background-color: red;
+    border: 1px solid rgb(214, 4, 4);
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .incorrect-option:hover {
+    background-color: rgb(214, 4, 4);
+  }
   
   .points {
     margin-left: 8px;
-    font-weight: bold;
     color: #388e3c;
+    text-align: center;
   }
   
   .explanation {
-    margin-top: 16px;
+    margin-top: 20px;
     padding: 8px;
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
     border-radius: 4px;
+  }
+
+  .explanation ol, .explanation ul {
+    padding-left: 20px;
   }
   

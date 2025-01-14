@@ -22,6 +22,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+}
+
+button {
+  letter-spacing: 0.5px;
+  line-height: 1.5;
 }
 
 * {
@@ -62,5 +69,23 @@ a {
 }
 
 .bg-primary {
-  background-color: crimson;
+  background-color: rgb(67, 163, 226);
+}
+
+.bg-grey-1 {
+  background-color: rgb(248, 248, 248);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.label-body {
+  padding: 3px 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+.border-1 {
+  border: 1px solid #ccc;
 }
