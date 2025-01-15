@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import '../css/QuestionGrid.css';
 
-interface Question {
+export interface Question {
   id: string;
   status: 'correct' | 'incorrect' | 'unanswered' | 'active';
 }
@@ -44,7 +44,12 @@ const QuestionGrid: React.FC<QuestionGridProps> = ({
   }, [questions, getStatusClass, onQuestionClick]);
 
   return (
-    <div className="question-grid">
+    <div className="question-grid border-1">
+      <div className="mb-10">
+        <p>
+          <b>Nomor Soal</b>
+        </p>
+      </div>
       <div className="legend">
         <p>
           <span className="correct"></span> = Benar
@@ -56,7 +61,7 @@ const QuestionGrid: React.FC<QuestionGridProps> = ({
           <span className="unanswered"></span> = Kosong
         </p>
         <p>
-          <span className="active"></span> = Dipilih
+          <span className="active"></span> = Aktif
         </p>
       </div>
       <div className="grid">{renderQuestionNumbers}</div>

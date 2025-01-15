@@ -89,3 +89,7 @@ a {
 .border-1 {
   border: 1px solid #ccc;
 }
+
+.mb-10 {
+  margin-bottom: 10px;
+}
