@@ -6,12 +6,12 @@ import ButtonComponent from './Button.component';
 import LabelComponent from './Label.component';
 
 interface QuestionProps {
-  questionNumber: number;
+  questionNumber?: number;
   category: string;
   questionText: string;
   options: { id: string; text: string; points?: number }[];
   selectedOptionId?: string;
-  explanation: string;
+  explanation?: string;
   correctOptionId?: string;
   isDiscussion?: boolean;
   onOptionSelect: (optionId: string) => void;
@@ -81,7 +81,7 @@ const Question: React.FC<QuestionProps> = ({
           </li>
         ))}
       </ul>
-      {isDiscussion && (
+      {isDiscussion && explanation && (
         <div className="bg-grey-1 border-1 explanation">
           <strong>Pembahasan:</strong>
           <div dangerouslySetInnerHTML={{ __html: explanation }} />
