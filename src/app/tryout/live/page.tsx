@@ -1,43 +1,76 @@
 'use client';
 
 import QuestionComponent from '@/components/Question.component';
-import QuestionGridComponent, {
-  Question,
-} from '@/components/QuestionGrid.component';
-import React, { useCallback, useState } from 'react';
+import QuestionGridComponent from '@/components/QuestionGrid.component';
+import { ModuleContainer } from '@/module';
+import { IQuestion, QuestionItemList } from '@/module/question';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 const TryoutLivePage = () => {
-  const [selectedOptionId, setSelectedOptionId] = useState<string | undefined>(
-    undefined,
-  );
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: '1', status: 'unanswered' },
-    { id: '2', status: 'unanswered' },
-    { id: '3', status: 'unanswered' },
-    { id: '4', status: 'unanswered' },
-    { id: '5', status: 'unanswered' },
-  ]);
+  //states
+  const [selectedOptionId, setSelectedOptionId] = useState<string>();
+  const [questionNumber, setQuestionNumber] = useState(1);
+  const [question, setQuestion] = useState<IQuestion>();
+  const [questions, setQuestions] = useState<QuestionItemList[]>();
+  const [questionDiscussion, setQuestionDiscussion] = useState();
 
+  //memo
+  const { dummyQuestionController } = useMemo(() => {
+    return new ModuleContainer().questionContainer;
+  }, []);
+
+  //methods
   const onOptionSelect = useCallback((optionId: string) => {
     setSelectedOptionId(optionId);
   }, []);
-
-  const onQuestionClick = useCallback(
+  const onQuestionByIdRequest = useCallback(
     (id: string) => {
-      const x: Question[] = questions.map((el) => {
-        if (el.id === id) {
-          return { ...el, status: 'active' };
-        }
-
-        return { ...el, status: 'unanswered' };
-      });
-      setQuestions(x);
+      dummyQuestionController()
+        .getQuestionById(id)
+        .then((res) => {
+          setQuestion(res);
+        });
     },
-    [questions],
+    [dummyQuestionController],
   );
+  const onQuestionClick = useCallback(
+    (id: string, index: number) => {
+      const x: QuestionItemList[] = questions
+        ? questions.map((el) => {
+            if (el.id === id) {
+              return { ...el, status: 'active' };
+            }
 
-  const x =
-    '<ol><li>penjelasan nomor 1</li><li>penjelasan nomor 2</li><li>penjelasan nomor 3</li></ol>';
+            return { ...el, status: 'unanswered' };
+          })
+        : [];
+      setQuestionNumber(index);
+      setQuestions(x);
+      onQuestionByIdRequest(id);
+    },
+    [onQuestionByIdRequest, questions],
+  );
+  const onQuestionListRequest = useCallback(() => {
+    dummyQuestionController()
+      .getQuestionList()
+      .then((res) => {
+        setQuestions(res);
+      });
+  }, [dummyQuestionController]);
+
+  //useEffect
+
+  //get question list sekali pada saat pertama diload
+  useEffect(() => {
+    onQuestionListRequest();
+  }, []);
+  //get question no.1 ketika question list udah tersedia
+  useEffect(() => {
+    if (questions && question === undefined) {
+      onQuestionByIdRequest(questions[0].id);
+    }
+  }, [questions, question, onQuestionByIdRequest]);
+
   return (
     <div
       style={{
@@ -47,45 +80,22 @@ const TryoutLivePage = () => {
         alignItems: 'flex-start',
       }}
     >
-      <QuestionComponent
-        questionNumber={1}
-        category="category"
-        questionText="Anda menemukan fitur otomatisasi dalam spreadsheet yang dapat memangkas waktu pembuatan laporan bulanan hingga 70%. Bagaimana Anda memastikan tim memanfaatkan fitur ini?"
-        options={[
-          {
-            id: 'a',
-            text: 'A. Mengirim panduan penggunaan fitur di grup tim ',
-            points: 1,
-          },
-          {
-            id: 'b',
-            text: 'B. Membuat template dengan fitur tersebut untuk digunakan tim ',
-            points: 2,
-          },
-          {
-            id: 'c',
-            text: 'C. Mengadakan demo langsung dan praktik bersama tim ',
-            points: 3,
-          },
-          {
-            id: 'd',
-            text: 'D. Menerapkan penggunaan fitur sebagai standar laporan unit ',
-            points: 4,
-          },
-          {
-            id: 'e',
-            text: 'E. Menyarankan setiap anggota tim untuk mencoba fitur tersebut ',
-            points: 5,
-          },
-        ]}
-        explanation={x}
-        onOptionSelect={onOptionSelect}
-        selectedOptionId={selectedOptionId}
-      />
-      <QuestionGridComponent
-        questions={questions}
-        onQuestionClick={onQuestionClick}
-      />
+      {question && questions && (
+        <>
+          <QuestionComponent
+            questionNumber={questionNumber}
+            category={question.category}
+            questionText={question.question}
+            options={question.option}
+            onOptionSelect={onOptionSelect}
+            selectedOptionId={selectedOptionId}
+          />
+          <QuestionGridComponent
+            questions={questions}
+            onQuestionClick={onQuestionClick}
+          />
+        </>
+      )}
     </div>
   );
 };
