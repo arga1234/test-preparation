@@ -1,8 +1,10 @@
 import { QuestionController } from './controller';
-import { QuestionDummyUsecase } from './usecase';
+import { QuestionCachingUsecase, QuestionDummyUsecase } from './usecase';
 
 export class QuestionContainer {
   dummyQuestionController = () => {
-    return new QuestionController(new QuestionDummyUsecase());
+    return new QuestionController(
+      new QuestionDummyUsecase(new QuestionCachingUsecase()),
+    );
   };
 }
