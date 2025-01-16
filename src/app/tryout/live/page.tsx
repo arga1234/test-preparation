@@ -72,31 +72,32 @@ const TryoutLivePage = () => {
   }, [questions, question, onQuestionByIdRequest]);
 
   return (
-    <div
-      style={{
-        margin: '10px',
-        display: 'flex',
-        flexWrap: 'nowrap',
-        alignItems: 'flex-start',
-      }}
-    >
-      {question && questions && (
-        <>
-          <QuestionComponent
-            questionNumber={questionNumber}
-            category={question.category}
-            questionText={question.question}
-            options={question.option}
-            onOptionSelect={onOptionSelect}
-            selectedOptionId={selectedOptionId}
-          />
-          <QuestionGridComponent
-            questions={questions}
-            onQuestionClick={onQuestionClick}
-          />
-        </>
-      )}
-    </div>
+    question &&
+    questions && (
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexWrap: 'nowrap',
+          alignItems: 'flex-start',
+          gap: '10px',
+          padding: '10px',
+        }}
+      >
+        <QuestionComponent
+          questionNumber={questionNumber}
+          category={question.category}
+          questionText={question.question}
+          options={question.option}
+          onOptionSelect={onOptionSelect}
+          selectedOptionId={selectedOptionId}
+        />
+        <QuestionGridComponent
+          questions={questions}
+          onQuestionClick={onQuestionClick}
+        />
+      </div>
+    )
   );
 };
 

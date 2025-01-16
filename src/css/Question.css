@@ -2,7 +2,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 16px;
-    margin-right: 10px;
+    flex-grow: 1;
   }
   
   .question-card h2 {
