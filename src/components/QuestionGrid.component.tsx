@@ -1,14 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 import '../css/QuestionGrid.css';
-
-export interface Question {
-  id: string;
-  status: 'correct' | 'incorrect' | 'unanswered' | 'active';
-}
+import { QuestionItemList } from '@/module/question';
 
 interface QuestionGridProps {
-  questions: Question[];
-  onQuestionClick: (id: string) => void;
+  questions: QuestionItemList[];
+  onQuestionClick: (id: string, index: number) => void;
 }
 
 const QuestionGrid: React.FC<QuestionGridProps> = ({
@@ -36,7 +32,7 @@ const QuestionGrid: React.FC<QuestionGridProps> = ({
       <div
         key={id}
         className={`question-number ${getStatusClass(status)}`}
-        onClick={() => onQuestionClick(id)}
+        onClick={() => onQuestionClick(id, index + 1)}
       >
         {index + 1}
       </div>
