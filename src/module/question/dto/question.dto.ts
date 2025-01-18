@@ -6,11 +6,22 @@ export interface IQuestionOption {
   points: number;
 }
 
+export type IQuestionStatus =
+  | 'correct'
+  | 'incorrect'
+  | 'unanswered'
+  | 'answered';
+
 export interface IQuestion {
   id: string;
   category: string;
   question: string;
   option: IQuestionOption[];
+  status?: IQuestionStatus;
+  correctOption: string;
+  selectedOption?: string;
+  number?: number;
+  isActive?: boolean;
 }
 
 export interface IQuestionItemList {

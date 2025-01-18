@@ -11,6 +11,12 @@ button {
   button:active {
     transform: scale(0.95);
   }
+
+  /* Disabled Button */
+  .disabled {
+    background-color: grey;
+    color: white;
+  }
   
   /* Primary Button */
   .primary {
