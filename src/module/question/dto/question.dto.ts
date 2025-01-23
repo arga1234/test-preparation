@@ -22,6 +22,7 @@ export interface IQuestion {
   selectedOption?: string;
   number?: number;
   isActive?: boolean;
+  duration?: number;
 }
 
 export interface IQuestionItemList {

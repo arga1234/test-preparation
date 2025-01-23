@@ -68,6 +68,11 @@ a {
   justify-content: flex-start;
 }
 
+.flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
 .bg-primary {
   background-color: rgb(67, 163, 226);
 }
@@ -88,6 +93,7 @@ a {
 
 .border-1 {
   border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .mb-10 {

@@ -272,7 +272,11 @@ export class QuestionDummyUsecase implements IQuestionUsecase {
       return new QuestionCollection(JSON.parse(qc));
     }
     return new QuestionCollection(
-      this.dataDummy.map((el, index) => ({ ...el, number: index + 1 })),
+      this.dataDummy.map((el, index) => ({
+        ...el,
+        number: index + 1,
+        duration: 0,
+      })),
     );
   };
 }

@@ -2,20 +2,18 @@
 
 import { QuestionGrid, Question } from '@/components';
 import { ModuleContainer } from '@/module';
-import {
-  IQuestion,
-  IQuestionStatus,
-  QuestionCollection,
-} from '@/module/question';
+import { IQuestion, QuestionCollection } from '@/module/question';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ButtonComponent from '@/components/Button.component';
+import Timer from '@/components/Timer.component';
 const TryoutLivePage = () => {
   //states
   const [quesctionCollection, setQuesctionCollection] =
     useState<QuestionCollection>();
   const [question, setQuestion] = useState<IQuestion>();
   const [testId, setTestId] = useState<string>();
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const searchParam = useSearchParams();
 
   //memo
@@ -26,28 +24,39 @@ const TryoutLivePage = () => {
   //methods
   const onOptionSelect = useCallback(
     (optionId: string) => {
-      if (quesctionCollection && question && testId) {
-        const q = {
-          ...question,
+      if (quesctionCollection) {
+        const qc = quesctionCollection.updateCollection({
+          index: selectedIndex,
           selectedOption: optionId,
-          status: 'answered' as IQuestionStatus,
-        };
-        setQuesctionCollection(quesctionCollection.updateCollection(q, testId));
-        setQuestion(q);
+          status: 'answered',
+          testId,
+        });
+        setQuesctionCollection(qc);
+        setQuestion(qc.getByIndex(selectedIndex));
       }
     },
-    [quesctionCollection, question, testId],
+    [quesctionCollection, testId, selectedIndex],
   );
   const onQuestionClick = useCallback(
-    (index: number) => {
+    (index?: number) => {
       if (quesctionCollection) {
-        const qc = quesctionCollection.activateSelectedQuestion(index);
-        setQuesctionCollection(qc);
-        const q = qc.getByIndex(index);
+        const qc = quesctionCollection.activateSelectedQuestion(
+          index ? index : 0,
+        );
+        const q = qc.getByIndex(index ? index : 0);
+        const duration = localStorage.getItem(`${testId}-duration`);
+        setQuesctionCollection(
+          qc.updateCollection({
+            index: selectedIndex, // selectedIndex should be the previous index incase to update the previous question duration
+            duration,
+            testId,
+          }),
+        );
         setQuestion(q);
+        setSelectedIndex(index);
       }
     },
-    [quesctionCollection],
+    [quesctionCollection, selectedIndex, testId],
   );
   const onQuestionCollectionRequest = useCallback(() => {
     if (testId) {
@@ -61,9 +70,14 @@ const TryoutLivePage = () => {
 
   //useEffect
   useEffect(() => {
+    setSelectedIndex(0);
+  }, []);
+
+  useEffect(() => {
     const x = searchParam.get('testId');
     setTestId(x ? x : undefined);
   }, [searchParam]);
+
   useEffect(() => {
     onQuestionCollectionRequest();
   }, [onQuestionCollectionRequest]);
@@ -72,14 +86,14 @@ const TryoutLivePage = () => {
     if (question === undefined && quesctionCollection) {
       const qs = quesctionCollection.activateSelectedQuestion(0);
       setQuesctionCollection(qs);
-      const q = qs.getByIndex(0);
-      setQuestion(q);
+      setQuestion(qs.getByIndex(selectedIndex));
     }
-  }, [question, quesctionCollection]);
+  }, [question, quesctionCollection, selectedIndex]);
 
   return (
     quesctionCollection &&
-    question && (
+    question &&
+    testId && (
       <div
         style={{
           width: '100%',
@@ -111,24 +125,53 @@ const TryoutLivePage = () => {
             <ButtonComponent
               text="sebelumnya"
               className="primary"
+              disabled={selectedIndex === 0 ? true : false}
               onClick={() => {
-                //
+                onQuestionClick(
+                  question.number ? question.number - 2 : undefined,
+                );
               }}
             />
             <ButtonComponent
               text="selanjutnya"
               className="primary"
+              disabled={
+                selectedIndex === quesctionCollection.questions.length - 1
+                  ? true
+                  : false
+              }
               onClick={() => {
-                //
+                onQuestionClick(question.number);
               }}
             />
           </div>
         </div>
 
-        <QuestionGrid
-          questions={quesctionCollection.questions}
-          onQuestionClick={onQuestionClick}
-        />
+        <div className="flex-column">
+          <div
+            className="flex-row"
+            style={{ flexWrap: 'nowrap', gap: '5px', marginBottom: '10px' }}
+          >
+            <Timer
+              id={question.id}
+              initialTime={question.duration || 0}
+              mode="countUp"
+              label="Lama Pengerjaan"
+              storageKey={`${testId}-duration`}
+            />
+            <Timer
+              id={question.id}
+              initialTime={5000}
+              mode="countDown"
+              label="Sisa Waktu"
+              storageKey={`${testId}-sisa-waktu`}
+            />
+          </div>
+          <QuestionGrid
+            questions={quesctionCollection.questions}
+            onQuestionClick={onQuestionClick}
+          />
+        </div>
       </div>
     )
   );
