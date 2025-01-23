@@ -2,8 +2,8 @@
 
 import React, { useCallback } from 'react';
 import '../css/Question.css';
-import ButtonComponent from './Button.component';
-import LabelComponent from './Label.component';
+import { ButtonComponent } from './Button.component';
+import { LabelComponent } from './Label.component';
 
 interface QuestionProps {
   questionNumber?: number;

@@ -1,12 +1,10 @@
 'use client';
 
-import { QuestionGrid, Question } from '@/components';
+import { QuestionGrid, Question, Timer, ButtonComponent } from '@/components';
 import { ModuleContainer } from '@/module';
 import { IQuestion, QuestionCollection } from '@/module/question';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import ButtonComponent from '@/components/Button.component';
-import Timer from '@/components/Timer.component';
 const TryoutLivePage = () => {
   //states
   const [quesctionCollection, setQuesctionCollection] =

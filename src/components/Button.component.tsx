@@ -8,21 +8,18 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
-  text,
-  disabled,
-  onClick,
-  className,
-}) => {
-  return (
-    <button
-      disabled={disabled ? true : false}
-      className={disabled ? 'disabled' : className}
-      onClick={onClick}
-    >
-      {text}
-    </button>
-  );
-};
+const ButtonComponent: React.FC<ButtonProps> = React.memo(
+  ({ text, disabled, onClick, className }) => {
+    return (
+      <button
+        disabled={disabled ? true : false}
+        className={disabled ? 'disabled' : className}
+        onClick={onClick}
+      >
+        {text}
+      </button>
+    );
+  },
+);
 
-export default React.memo(Button);
+export { ButtonComponent };

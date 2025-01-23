@@ -69,4 +69,4 @@ const Timer: React.FC<TimerProps> = React.memo(
   },
 );
 
-export default Timer;
+export { Timer };
