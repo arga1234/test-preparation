@@ -4,6 +4,7 @@ import React, { useCallback } from 'react';
 import '../css/Question.css';
 import { ButtonComponent } from './Button.component';
 import { LabelComponent } from './Label.component';
+import { DialogButton } from './DialogButton.component';
 
 interface QuestionProps {
   questionNumber?: number;
@@ -54,13 +55,16 @@ const Question: React.FC<QuestionProps> = React.memo(
             <h4 style={{ marginRight: '10px' }}>Soal No {questionNumber}</h4>
             <LabelComponent primary text={category} />
           </div>
-          <ButtonComponent
-            className="danger"
-            text="Laporkan Soal"
-            onClick={() => {
+          <DialogButton
+            dialogTitle="Laporkan Soal"
+            buttonClassName="danger"
+            label={'Laporkan'}
+            onSubmit={() => {
               //
             }}
-          />
+          >
+            <></>
+          </DialogButton>
         </div>
         <p>{questionText}</p>
         <ul>
