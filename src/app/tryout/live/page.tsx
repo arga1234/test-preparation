@@ -104,11 +104,8 @@ const TryoutLivePage = () => {
       >
         <div style={{ width: '100%' }} className="flex-column">
           <Question
-            questionNumber={question.number}
-            category={question.category}
-            questionText={question.question}
-            options={question.option}
-            selectedOptionId={question.selectedOption}
+            testId={testId}
+            question={question}
             onOptionSelect={onOptionSelect}
           />
           <div

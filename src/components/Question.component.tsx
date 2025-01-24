@@ -1,34 +1,37 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import '../css/Question.css';
-import { ButtonComponent } from './Button.component';
 import { LabelComponent } from './Label.component';
+import { DialogButton } from './DialogButton.component';
+import { IQuestion } from '@/module/question';
 
 interface QuestionProps {
-  questionNumber?: number;
-  category: string;
-  questionText: string;
-  options: { id: string; text: string; points?: number }[];
-  selectedOptionId?: string;
-  explanation?: string;
-  correctOptionId?: string;
   isDiscussion?: boolean;
   onOptionSelect: (optionId: string) => void;
+  question: IQuestion;
+  testId: string;
+  onReport?: (testId: string, questionId: string) => Promise<void>;
 }
 
 const Question: React.FC<QuestionProps> = React.memo(
-  ({
-    questionNumber,
-    category,
-    questionText,
-    options,
-    selectedOptionId,
-    explanation,
-    isDiscussion,
-    correctOptionId,
-    onOptionSelect,
-  }) => {
+  ({ isDiscussion, question, testId, onOptionSelect, onReport }) => {
+    //props
+    const {
+      question: questionText,
+      number: questionNumber,
+      category,
+      option: options,
+      selectedOption: selectedOptionId,
+      correctOption: correctOptionId,
+      explanation,
+      id: questionId,
+    } = question;
+
+    //state
+    const [reportMessage, setReportMessage] = useState<string>();
+
+    //methods
     const optionClass = useCallback(
       (optionId: string) => {
         if (
@@ -47,6 +50,21 @@ const Question: React.FC<QuestionProps> = React.memo(
       },
       [selectedOptionId, isDiscussion, correctOptionId],
     );
+    const onReportSubmit = useCallback(() => {
+      if (onReport) {
+        // loading true
+        onReport(questionId, testId)
+          .then(() => {
+            // success alert
+          })
+          .catch(() => {
+            // error alert
+          })
+          .finally(() => {
+            // loading false
+          });
+      }
+    }, [onReport, questionId, testId]);
     return (
       <div className="bg-white question-card">
         <div className="flex-row center-between">
@@ -54,13 +72,27 @@ const Question: React.FC<QuestionProps> = React.memo(
             <h4 style={{ marginRight: '10px' }}>Soal No {questionNumber}</h4>
             <LabelComponent primary text={category} />
           </div>
-          <ButtonComponent
-            className="danger"
-            text="Laporkan Soal"
-            onClick={() => {
-              //
-            }}
-          />
+          <DialogButton
+            dialogTitle="Laporkan Soal"
+            buttonClassName="danger"
+            label={'Laporkan'}
+            onSubmit={onReportSubmit}
+          >
+            <input
+              type="text"
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: 'none',
+                backgroundColor: '#eee',
+                borderRadius: '5px',
+                outline: 'none',
+              }}
+              placeholder="Pesan"
+              value={reportMessage}
+              onChange={(event) => setReportMessage(event.target.value)}
+            />
+          </DialogButton>
         </div>
         <p>{questionText}</p>
         <ul>
