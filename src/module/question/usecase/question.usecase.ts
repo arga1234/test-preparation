@@ -5,7 +5,7 @@ export interface IQuestionUsecase {
   reportQuestion: (testId: string, questionId: string) => Promise<void>;
 }
 
-export class QuestionDummyUsecase implements IQuestionUsecase {
+export class QuestionUsecase implements IQuestionUsecase {
   private dataDummy: IQuestion[] = [
     {
       id: '1',
