@@ -5,4 +5,8 @@ export class QuestionController {
   getQuestionCollection = async (id: string) => {
     return this.uc.getQuestionCollection(id);
   };
+
+  reportQuestion = (testId: string, id: string) => {
+    return this.uc.reportQuestion(testId, id);
+  };
 }

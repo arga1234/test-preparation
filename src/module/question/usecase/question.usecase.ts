@@ -2,6 +2,7 @@ import { IQuestion } from '../dto';
 import { QuestionCollection } from '../entity';
 export interface IQuestionUsecase {
   getQuestionCollection: (id: string) => QuestionCollection;
+  reportQuestion: (testId: string, questionId: string) => Promise<void>;
 }
 
 export class QuestionDummyUsecase implements IQuestionUsecase {
@@ -278,5 +279,10 @@ export class QuestionDummyUsecase implements IQuestionUsecase {
         duration: 0,
       })),
     );
+  };
+
+  reportQuestion = async (testId: string, questionId: string) => {
+    console.log(testId, questionId);
+    return;
   };
 }

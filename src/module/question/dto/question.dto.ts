@@ -23,6 +23,7 @@ export interface IQuestion {
   number?: number;
   isActive?: boolean;
   duration?: number;
+  explanation?: string;
 }
 
 export interface IQuestionItemList {
