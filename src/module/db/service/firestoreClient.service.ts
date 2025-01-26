@@ -14,7 +14,7 @@ export class FirestoreClient<T> implements IDatabaseClient<T> {
   async getSingle(
     whereClause: IWhereClause,
     columns?: (keyof T)[],
-  ): Promise<Partial<T> | null> {
+  ): Promise<T | null> {
     const collectionRef = collection(this.firestore, this.collectionName);
     let q: Query = collectionRef;
 
@@ -36,7 +36,7 @@ export class FirestoreClient<T> implements IDatabaseClient<T> {
 
     // Return only selected columns if specified
     if (columns) {
-      const selectedData: Partial<T> = {};
+      const selectedData = {} as T;
       for (const column of columns) {
         if (column in data) {
           selectedData[column] = data[column as keyof DocumentData];
@@ -51,7 +51,7 @@ export class FirestoreClient<T> implements IDatabaseClient<T> {
   async getList(
     whereClause: IWhereClause,
     columns?: (keyof T)[],
-  ): Promise<Partial<T>[]> {
+  ): Promise<T[]> {
     const collectionRef = collection(this.firestore, this.collectionName);
     let q: Query = collectionRef;
 
@@ -71,7 +71,7 @@ export class FirestoreClient<T> implements IDatabaseClient<T> {
 
       // Return only selected columns if specified
       if (columns) {
-        const selectedData: Partial<T> = {};
+        const selectedData: T = {} as T;
         for (const column of columns) {
           if (column in data) {
             selectedData[column] = data[column as keyof DocumentData];
