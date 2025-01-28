@@ -162,6 +162,19 @@ const TryoutLivePage = () => {
               storageKey={`${testId}-sisa-waktu`}
             />
           </div>
+          <ButtonComponent
+            style={{ marginBottom: '10px' }}
+            text="Akhiri Pengerjaan"
+            className="primary"
+            disabled={
+              selectedIndex === quesctionCollection.questions.length - 1
+                ? true
+                : false
+            }
+            onClick={() => {
+              onQuestionClick(question.number);
+            }}
+          />
           <QuestionGrid
             questions={quesctionCollection.questions}
             onQuestionClick={onQuestionClick}
