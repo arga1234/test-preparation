@@ -15,7 +15,10 @@ export class QuestionCollection {
   getByIndex = (index?: number) => {
     return this.questions.find((el, indexEl) => indexEl === index);
   };
-  updateCollection = (params: IUpdateCollectionParams) => {
+  updateCollection = (
+    params: IUpdateCollectionParams,
+    isDiscussion?: boolean,
+  ) => {
     const { selectedOption, status, index, duration, testId } = params;
     if (index !== undefined && testId !== undefined) {
       const question = this.getByIndex(index);
@@ -31,7 +34,8 @@ export class QuestionCollection {
 
         return el;
       });
-      localStorage.setItem(testId, JSON.stringify(qc));
+      if (!isDiscussion)
+        localStorage.setItem(`testId-${testId}`, JSON.stringify(qc));
       return new QuestionCollection(qc);
     } else {
       throw new Error('Test Id and index are not defined');

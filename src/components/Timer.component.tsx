@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 interface TimerProps {
   initialTime: number; // Waktu awal dalam detik
-  mode: 'countUp' | 'countDown'; // Mode: hitung maju atau mundur
+  mode: 'countUp' | 'countDown' | 'stay'; // Mode: hitung maju/mundur/tetap
   onEnd?: () => void; // Callback ketika waktu habis (untuk hitung mundur)
   storageKey: string; // Key untuk menyimpan data di localStorage
   label?: string;
@@ -21,25 +21,27 @@ const Timer: React.FC<TimerProps> = React.memo(
     });
 
     useEffect(() => {
-      if (mode === 'countUp') setTime(initialTime);
+      if (mode === 'countUp' || mode === 'stay') setTime(initialTime);
     }, [id, initialTime, mode]);
 
     useEffect(() => {
-      const interval = setInterval(() => {
-        setTime((prevTime) => {
-          const updatedTime =
-            mode === 'countUp' ? prevTime + 1 : Math.max(prevTime - 1, 0);
+      if (mode !== 'stay') {
+        const interval = setInterval(() => {
+          setTime((prevTime) => {
+            const updatedTime =
+              mode === 'countUp' ? prevTime + 1 : Math.max(prevTime - 1, 0);
 
-          if (mode === 'countDown' && updatedTime === 0) {
-            clearInterval(interval); // Hentikan interval jika waktu habis
-            if (onEnd) onEnd(); // Jalankan callback jika ada
-          }
+            if (mode === 'countDown' && updatedTime === 0) {
+              clearInterval(interval); // Hentikan interval jika waktu habis
+              if (onEnd) onEnd(); // Jalankan callback jika ada
+            }
 
-          return updatedTime;
-        });
-      }, 1000);
+            return updatedTime;
+          });
+        }, 1000);
 
-      return () => clearInterval(interval); // Bersihkan interval saat komponen di-unmount
+        return () => clearInterval(interval); // Bersihkan interval saat komponen di-unmount
+      }
     }, [mode, onEnd]);
 
     useEffect(() => {

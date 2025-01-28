@@ -5,12 +5,14 @@ import { ModuleContainer } from '@/module';
 import { IQuestion, QuestionCollection } from '@/module/question';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-const TryoutLivePage = () => {
+
+const DiscussionPage = () => {
   //states
   const [quesctionCollection, setQuesctionCollection] =
     useState<QuestionCollection>();
   const [question, setQuestion] = useState<IQuestion>();
   const [testId, setTestId] = useState<string>();
+  const [tryId, setTryId] = useState<string>();
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const searchParam = useSearchParams();
 
@@ -20,21 +22,6 @@ const TryoutLivePage = () => {
   }, []);
 
   //methods
-  const onOptionSelect = useCallback(
-    (optionId: string) => {
-      if (quesctionCollection) {
-        const qc = quesctionCollection.updateCollection({
-          index: selectedIndex,
-          selectedOption: optionId,
-          status: 'answered',
-          testId,
-        });
-        setQuesctionCollection(qc);
-        setQuestion(qc.getByIndex(selectedIndex));
-      }
-    },
-    [quesctionCollection, testId, selectedIndex],
-  );
   const onQuestionClick = useCallback(
     (index?: number) => {
       if (quesctionCollection) {
@@ -44,11 +31,14 @@ const TryoutLivePage = () => {
         const q = qc.getByIndex(index ? index : 0);
         const duration = localStorage.getItem(`${testId}-duration`);
         setQuesctionCollection(
-          qc.updateCollection({
-            index: selectedIndex, // selectedIndex should be the previous index incase to update the previous question duration
-            duration,
-            testId,
-          }),
+          qc.updateCollection(
+            {
+              index: selectedIndex, // selectedIndex should be the previous index incase to update the previous question duration
+              duration,
+              testId,
+            },
+            true,
+          ),
         );
         setQuestion(q);
         setSelectedIndex(index);
@@ -57,14 +47,14 @@ const TryoutLivePage = () => {
     [quesctionCollection, selectedIndex, testId],
   );
   const onQuestionCollectionRequest = useCallback(() => {
-    if (testId) {
+    if (testId && tryId) {
       questionController()
-        .getQuestionCollection(testId)
+        .getUserAnsweredQuestionCollection(testId, tryId)
         .then((res) => {
           setQuesctionCollection(res);
         });
     }
-  }, [questionController, testId]);
+  }, [questionController, testId, tryId]);
 
   //useEffect
   useEffect(() => {
@@ -72,8 +62,10 @@ const TryoutLivePage = () => {
   }, []);
 
   useEffect(() => {
-    const x = searchParam.get('testId');
-    setTestId(x ? x : undefined);
+    const testId = searchParam.get('testId');
+    const tryId = searchParam.get('tryId');
+    setTestId(testId || undefined);
+    setTryId(tryId || undefined);
   }, [searchParam]);
 
   useEffect(() => {
@@ -103,11 +95,7 @@ const TryoutLivePage = () => {
         }}
       >
         <div style={{ width: '100%' }} className="flex-column">
-          <Question
-            testId={testId}
-            question={question}
-            onOptionSelect={onOptionSelect}
-          />
+          <Question isDiscussion testId={testId} question={question} />
           <div
             style={{
               marginTop: '10px',
@@ -143,39 +131,17 @@ const TryoutLivePage = () => {
         </div>
 
         <div className="flex-column">
-          <div
-            className="flex-row"
-            style={{ flexWrap: 'nowrap', gap: '5px', marginBottom: '10px' }}
-          >
+          <div style={{ marginBottom: '10px' }}>
             <Timer
               id={question.id}
               initialTime={question.duration || 0}
-              mode="countUp"
+              mode="stay"
               label="Lama Pengerjaan"
               storageKey={`${testId}-duration`}
             />
-            <Timer
-              id={question.id}
-              initialTime={5000}
-              mode="countDown"
-              label="Sisa Waktu"
-              storageKey={`${testId}-sisa-waktu`}
-            />
           </div>
-          <ButtonComponent
-            style={{ marginBottom: '10px' }}
-            text="Akhiri Pengerjaan"
-            className="primary"
-            disabled={
-              selectedIndex === quesctionCollection.questions.length - 1
-                ? true
-                : false
-            }
-            onClick={() => {
-              onQuestionClick(question.number);
-            }}
-          />
           <QuestionGrid
+            isDiscussion
             questions={quesctionCollection.questions}
             onQuestionClick={onQuestionClick}
           />
@@ -185,4 +151,4 @@ const TryoutLivePage = () => {
   );
 };
 
-export default React.memo(TryoutLivePage);
+export default React.memo(DiscussionPage);

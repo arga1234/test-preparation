@@ -34,13 +34,17 @@ export class QuestionService implements IDatabaseClient<IQuestion> {
               points: 0,
             },
           ],
-          correctOption: 'a',
+          correctOption: 'd',
+          explanation:
+            '<p>Selamat datang di <strong>website kami</strong>. Klik <a href="https://example.com">di sini</a> untuk informasi lebih lanjut.</p>',
         },
         {
           id: '2',
           category: 'TWK-Bahasa Indonesia',
           question: 'Penulisan kata yang salah terdapat pada kalimat ...',
-          correctOption: 'b',
+          correctOption: 'd',
+          explanation:
+            '<iframe width="100%" height="400px" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
           option: [
             {
               id: 'a',
@@ -95,7 +99,7 @@ export class QuestionService implements IDatabaseClient<IQuestion> {
           category: 'TWK-Bahasa Indonesia',
           question:
             'Penggunaan huruf kapital yang salah terdapat pada kalimat ...',
-          correctOption: 'd',
+          correctOption: 'a',
           option: [
             {
               id: 'a',
@@ -116,7 +120,7 @@ export class QuestionService implements IDatabaseClient<IQuestion> {
           id: '5',
           category: 'TWK-Bahasa Indonesia',
           question: 'Pemakaian kata depan yang salah terdapat pada kalimat ...',
-          correctOption: 'e',
+          correctOption: 'c',
           option: [
             {
               id: 'a',
@@ -210,7 +214,7 @@ export class QuestionService implements IDatabaseClient<IQuestion> {
           category: 'TWK-Nasionalisme',
           question:
             'Sumpah Pemuda yang diikrarkan pada tanggal 28 Oktober 1928 menunjukkan bahwa ...',
-          correctOption: 'c',
+          correctOption: 'b',
           option: [
             {
               id: 'a',
@@ -244,7 +248,7 @@ export class QuestionService implements IDatabaseClient<IQuestion> {
           category: 'TWK-Nasionalisme',
           question:
             'Tindakan yang mencerminkan nasionalisme dalam menjaga keutuhan NKRI adalah ...',
-          correctOption: 'd',
+          correctOption: 'a',
           option: [
             {
               id: 'a',
@@ -273,7 +277,7 @@ export class QuestionService implements IDatabaseClient<IQuestion> {
           id: '10',
           category: 'TWK-Nasionalisme',
           question: 'Perwujudan nasionalisme dapat dilakukan melalui ...',
-          correctOption: 'e',
+          correctOption: 'a',
           option: [
             {
               id: 'a',
