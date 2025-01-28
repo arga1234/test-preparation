@@ -6,6 +6,10 @@ export class QuestionController {
     return this.uc.getQuestionCollection(id);
   };
 
+  getUserAnsweredQuestionCollection = (testId: string, tryId: string) => {
+    return this.uc.getUserAnsweredQuestionCollection(testId, tryId);
+  };
+
   reportQuestion = (testId: string, id: string) => {
     return this.uc.reportQuestion(testId, id);
   };

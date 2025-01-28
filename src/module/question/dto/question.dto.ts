@@ -26,6 +26,12 @@ export interface IQuestion {
   explanation?: string;
 }
 
+export interface IQuestionAnswer {
+  questionId: string;
+  selectedOption: string;
+  duration: number;
+}
+
 export interface IQuestionItemList {
   id: string;
   status: 'correct' | 'incorrect' | 'unanswered' | 'active';

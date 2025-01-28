@@ -8,7 +8,7 @@ import { IQuestion } from '@/module/question';
 
 interface QuestionProps {
   isDiscussion?: boolean;
-  onOptionSelect: (optionId: string) => void;
+  onOptionSelect?: (optionId: string) => void;
   question: IQuestion;
   testId: string;
   onReport?: (testId: string, questionId: string) => Promise<void>;
@@ -94,7 +94,8 @@ const Question: React.FC<QuestionProps> = React.memo(
             />
           </DialogButton>
         </div>
-        <p>{questionText}</p>
+        <div dangerouslySetInnerHTML={{ __html: questionText }} />
+        {/* <p>{questionText}</p> */}
         <ul>
           {options.map((option) => (
             <li className="flex-row center-start" key={option.id}>
@@ -104,7 +105,13 @@ const Question: React.FC<QuestionProps> = React.memo(
                   textAlign: 'left',
                 }}
                 className={optionClass(option.id)}
-                onClick={() => onOptionSelect(option.id)}
+                onClick={() =>
+                  onOptionSelect
+                    ? onOptionSelect(option.id)
+                    : () => {
+                        return;
+                      }
+                }
               >
                 {option.text}
               </button>
@@ -117,7 +124,10 @@ const Question: React.FC<QuestionProps> = React.memo(
         {isDiscussion && explanation && (
           <div className="bg-grey-1 border-1 explanation">
             <strong>Pembahasan:</strong>
-            <div dangerouslySetInnerHTML={{ __html: explanation }} />
+            <div
+              style={{ marginTop: '10px' }}
+              dangerouslySetInnerHTML={{ __html: explanation }}
+            />
           </div>
         )}
       </div>
