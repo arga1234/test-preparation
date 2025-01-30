@@ -11,16 +11,19 @@ export interface IQuestionUsecase {
 }
 
 export class QuestionUsecase implements IQuestionUsecase {
-  constructor(
-    private x: IDatabaseClient<IQuestion>,
-    private y: IDatabaseClient<IQuestionAnswer>,
-  ) {}
+  constructor(private x: IDatabaseClient) {}
   getUserAnsweredQuestionCollection = async (testId: string, tryId: string) => {
     const qc = await this.getQuestionCollection(testId);
     const cachedAnswer = localStorage.getItem(`tryId-${tryId}`);
-    const userAnswer: IQuestionAnswer[] = cachedAnswer
-      ? JSON.parse(cachedAnswer)
-      : await this.y.getList({ tryId });
+    const userAnswer = cachedAnswer
+      ? (JSON.parse(cachedAnswer) as IQuestionAnswer[])
+      : (
+          await this.x.getList<IQuestionAnswer>(
+            'questionAnswer',
+            { limit: 100, offset: 0 },
+            [{ column: 'tryId', operator: '=', value: tryId }],
+          )
+        ).data;
     return new QuestionCollection(
       qc.questions.map((el) => {
         const x = userAnswer.find((el2) => el2.questionId === el.id);
@@ -45,9 +48,13 @@ export class QuestionUsecase implements IQuestionUsecase {
     if (qc) {
       return new QuestionCollection(JSON.parse(qc));
     }
-    const res = await this.x.getList({ testId });
+    const res = await this.x.getList<IQuestion>(
+      'question',
+      { limit: 100, offset: 0 },
+      [{ column: 'testId', operator: '=', value: testId }],
+    );
     return new QuestionCollection(
-      res.map((el, index) => ({
+      res.data.map((el, index) => ({
         ...el,
         number: index + 1,
         duration: 0,

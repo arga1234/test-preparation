@@ -1,86 +1,71 @@
-import { IDatabaseClient, IWhereClause } from '../repository';
-import { collection, query, where, getDocs, limit } from 'firebase/firestore';
-import { Firestore, Query, DocumentData } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  limit,
+  startAfter,
+  getDocs,
+  WhereFilterOp,
+} from 'firebase/firestore';
+import { Firestore } from 'firebase/firestore';
+import { IDatabaseClient, IPagination, IWhereClause } from '../repository';
 
-export class FirestoreClient<T> implements IDatabaseClient<T> {
-  private firestore: Firestore;
-  private collectionName: string;
+class FirestoreClient implements IDatabaseClient {
+  private db: Firestore;
 
-  constructor(firestore: Firestore, collectionName: string) {
-    this.firestore = firestore;
-    this.collectionName = collectionName;
+  constructor() {
+    this.db = getFirestore();
   }
 
-  async getSingle(
-    whereClause: IWhereClause,
+  async getList<T>(
+    collectionName: string,
+    pagination: IPagination,
+    whereClauses?: IWhereClause[],
     columns?: (keyof T)[],
-  ): Promise<T | null> {
-    const collectionRef = collection(this.firestore, this.collectionName);
-    let q: Query = collectionRef;
+  ): Promise<{ data: T[]; total: number }> {
+    const colRef = collection(this.db, collectionName);
+    let q = query(colRef);
 
-    // Apply where conditions
-    for (const [key, value] of Object.entries(whereClause)) {
-      q = query(q, where(key, '==', value));
+    // Apply where clauses if provided
+    if (whereClauses) {
+      whereClauses.forEach((clause) => {
+        q = query(
+          q,
+          where(clause.column, clause.operator as WhereFilterOp, clause.value),
+        );
+      });
     }
 
-    // Limit to a single document
-    q = query(q, limit(1));
-    const snapshot = await getDocs(q);
+    // Get total count
+    const totalSnapshot = await getDocs(q);
+    const total = totalSnapshot.size;
 
-    if (snapshot.empty) {
-      return null;
-    }
-
-    const doc = snapshot.docs[0];
-    const data = doc.data() as DocumentData;
-
-    // Return only selected columns if specified
-    if (columns) {
-      const selectedData = {} as T;
-      for (const column of columns) {
-        if (column in data) {
-          selectedData[column] = data[column as keyof DocumentData];
-        }
+    // Apply pagination
+    q = query(q, limit(pagination.limit));
+    if (pagination.offset > 0) {
+      const offsetSnapshot = await getDocs(q);
+      const lastVisible = offsetSnapshot.docs[pagination.offset - 1];
+      if (lastVisible) {
+        q = query(q, startAfter(lastVisible));
       }
-      return selectedData;
     }
 
-    return { id: doc.id, ...data } as T;
-  }
-
-  async getList(
-    whereClause: IWhereClause,
-    columns?: (keyof T)[],
-  ): Promise<T[]> {
-    const collectionRef = collection(this.firestore, this.collectionName);
-    let q: Query = collectionRef;
-
-    // Apply where conditions
-    for (const [key, value] of Object.entries(whereClause)) {
-      q = query(q, where(key, '==', value));
-    }
-
+    // Fetch data
     const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-      return [];
-    }
-
-    return snapshot.docs.map((doc) => {
-      const data = doc.data() as DocumentData;
-
-      // Return only selected columns if specified
+    const data: T[] = snapshot.docs.map((doc) => {
+      const docData = doc.data() as T;
       if (columns) {
-        const selectedData: T = {} as T;
-        for (const column of columns) {
-          if (column in data) {
-            selectedData[column] = data[column as keyof DocumentData];
-          }
-        }
-        return selectedData;
+        return columns.reduce((acc, key) => {
+          acc[key] = docData[key];
+          return acc;
+        }, {} as T);
       }
-
-      return { id: doc.id, ...data } as T;
+      return docData;
     });
+
+    return { data, total };
   }
 }
+
+export default FirestoreClient;

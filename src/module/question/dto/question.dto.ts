@@ -14,6 +14,7 @@ export type IQuestionStatus =
 
 export interface IQuestion {
   id: string;
+  testId: string;
   category: string;
   question: string;
   option: IQuestionOption[];
@@ -27,6 +28,8 @@ export interface IQuestion {
 }
 
 export interface IQuestionAnswer {
+  id: string;
+  tryId: string;
   questionId: string;
   selectedOption: string;
   duration: number;
