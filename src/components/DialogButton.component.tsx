@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { ButtonComponent } from './Button.component';
 import { DialogBox } from './Dialog.component';

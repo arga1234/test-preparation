@@ -1,0 +1,13 @@
+.header {
+  margin-bottom: 24px;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  color: #b0b0b0;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: bold;
+}
