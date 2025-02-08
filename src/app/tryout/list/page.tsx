@@ -1,25 +1,57 @@
-import React from 'react';
-import { Header, Card } from '@/components';
-import '../../../css/Page.css'; // Import CSS file
+'use client';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Header, CardV2 } from '@/components';
+import { ModuleContainer } from '@/module';
+import { ITryoutItemDto } from '@/module/tryout';
+import { useSearchParams } from 'next/navigation';
 
-const TryoutListPage: React.FC = () => {
+const TryoutListPage: React.FC = React.memo(() => {
+  const style = useMemo(
+    () => ({
+      page: {
+        minHeight: '100vh',
+        padding: '32px',
+      },
+    }),
+    [],
+  );
+  const searchParam = useSearchParams();
+  const [state, setState] = useState<ITryoutItemDto[]>();
+  const { getTryoutItem } = useMemo(() => {
+    return new ModuleContainer().tryoutContainer.tryoutController();
+  }, []);
+
+  useEffect(() => {
+    const x = searchParam.get('id');
+    getTryoutItem(x ? x : '1')
+      .then((res) => {
+        setState(res);
+      })
+      .catch(() => {
+        //
+      })
+      .finally(() => {
+        //
+      });
+  }, [getTryoutItem]);
   return (
-    <div className="page">
-      <Header title="Try Out" subtitle="Pilih tryout sesuai kategori" />
+    <div style={style.page}>
+      <Header title="Try Out List" subtitle="Pilih tryout" />
       <div style={{ gap: '10px' }} className="flex-row">
-        <Card
-          title="Try Out SKD"
-          description="Tantang diri kamu untuk meraih skor tertinggi dari pengguna lain."
-          imageUrl="https://www.dropbox.com/scl/fi/efiurp2btj3bnd1c4bdw5/rb_2150368549-1-1.png?rlkey=q55svu5hi3in1n7h5w3qn9n5z&st=tunvcxbp&raw=1"
-        />
-        <Card
-          title="Try Out SKB"
-          description="Kerjakan try out SKB sesuai bidang formasi yang kamu pilih."
-          imageUrl="https://www.dropbox.com/scl/fi/1r2v26gg0leljy31ja1vp/hand-drawn-college-entrance-exam-illustration-b-1.png?rlkey=88k05cpbbn8wnglkxzoofm1up&st=nbq8moml&raw=1"
-        />
+        {state &&
+          state.map((el, index) => (
+            <CardV2
+              key={index}
+              title={el.title}
+              rating={el.rating}
+              reviews={el.review}
+              questions={el.totalItem}
+              time={el.totalTime}
+            />
+          ))}
       </div>
     </div>
   );
-};
+});
 
 export default React.memo(TryoutListPage);

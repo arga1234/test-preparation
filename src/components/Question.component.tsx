@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
-import '../css/Question.css';
 import { LabelComponent } from './Label.component';
 import { DialogButton } from './DialogButton.component';
 import { IQuestion } from '@/module/question';
+import '../css/Question.css';
 
 interface QuestionProps {
   isDiscussion?: boolean;
@@ -69,7 +69,7 @@ const Question: React.FC<QuestionProps> = React.memo(
       <div className="bg-white question-card">
         <div className="flex-row center-between">
           <div className="flex-row center-start">
-            <h4 style={{ marginRight: '10px' }}>Soal No {questionNumber}</h4>
+            <h4 className="mr-10">Soal No {questionNumber}</h4>
             <LabelComponent primary text={category} />
           </div>
           <DialogButton
@@ -80,14 +80,7 @@ const Question: React.FC<QuestionProps> = React.memo(
           >
             <input
               type="text"
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: 'none',
-                backgroundColor: '#eee',
-                borderRadius: '5px',
-                outline: 'none',
-              }}
+              className="input-text"
               placeholder="Pesan"
               value={reportMessage}
               onChange={(event) => setReportMessage(event.target.value)}
@@ -125,7 +118,7 @@ const Question: React.FC<QuestionProps> = React.memo(
           <div className="bg-grey-1 border-1 explanation">
             <strong>Pembahasan:</strong>
             <div
-              style={{ marginTop: '10px' }}
+              className="mt-10"
               dangerouslySetInnerHTML={{ __html: explanation }}
             />
           </div>

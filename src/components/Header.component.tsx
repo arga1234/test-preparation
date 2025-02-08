@@ -1,16 +1,34 @@
 import React from 'react';
-import '../css/Header.css'; // Import CSS file
 
 interface HeaderProps {
   title: string;
   subtitle: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
-  return (
-    <header className="header">
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-    </header>
-  );
-};
+export const Header: React.FC<HeaderProps> = React.memo(
+  ({ title, subtitle }) => {
+    const styles: { [key: string]: React.CSSProperties } = React.useMemo(
+      () => ({
+        header: {
+          marginBottom: '24px',
+        },
+        breadcrumb: {
+          fontSize: '14px',
+          color: '#b0b0b0',
+        },
+        headerH1: {
+          fontSize: '32px',
+          fontWeight: 'bold',
+        },
+      }),
+      [],
+    );
+
+    return (
+      <header style={styles.header}>
+        <h1 style={styles.headerH1}>{title}</h1>
+        <p style={styles.breadcrumb}>{subtitle}</p>
+      </header>
+    );
+  },
+);

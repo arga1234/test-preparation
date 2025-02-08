@@ -17,8 +17,8 @@ const DiscussionPage = () => {
   const searchParam = useSearchParams();
 
   //memo
-  const { questionController } = useMemo(() => {
-    return new ModuleContainer().questionContainer;
+  const { tryoutController } = useMemo(() => {
+    return new ModuleContainer().tryoutContainer;
   }, []);
 
   //methods
@@ -48,13 +48,13 @@ const DiscussionPage = () => {
   );
   const onQuestionCollectionRequest = useCallback(() => {
     if (testId && tryId) {
-      questionController()
-        .getUserAnsweredQuestionCollection(testId, tryId)
+      tryoutController()
+        .getTryoutAnswerByTryId(testId, tryId)
         .then((res) => {
           setQuesctionCollection(res);
         });
     }
-  }, [questionController, testId, tryId]);
+  }, [tryoutController, testId, tryId]);
 
   //useEffect
   useEffect(() => {

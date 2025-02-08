@@ -1,5 +1,4 @@
-import React from 'react';
-import '../css/Dialog.css';
+import React, { useMemo } from 'react';
 
 interface DialogBoxProps {
   isVisible: boolean;
@@ -11,24 +10,85 @@ interface DialogBoxProps {
 
 const DialogBox: React.FC<DialogBoxProps> = React.memo(
   ({ isVisible, title, onClose, onSubmit, children }) => {
+    const styles: { [key: string]: React.CSSProperties } = useMemo(
+      () => ({
+        dialogOverlay: {
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        dialogModal: {
+          backgroundColor: '#fff',
+          borderRadius: '8px',
+          minWidth: '400px',
+          maxWidth: '90%',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+          overflow: 'hidden',
+        },
+        dialogHeader: {
+          padding: '16px',
+          borderBottom: '1px solid #ddd',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        },
+        dialogCloseButton: {
+          background: 'none',
+          border: 'none',
+          fontSize: '16px',
+          cursor: 'pointer',
+        },
+        dialogContent: {
+          padding: '16px',
+        },
+        dialogFooter: {
+          padding: '16px',
+          borderTop: '1px solid #ddd',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: '8px',
+        },
+        dialogButton: {
+          padding: '8px 16px',
+          fontSize: '14px',
+          borderRadius: '4px',
+          border: '1px solid #ddd',
+          cursor: 'pointer',
+          backgroundColor: '#f5f5f5',
+        },
+        dialogSubmitButton: {
+          backgroundColor: '#007bff',
+          color: '#fff',
+          border: 'none',
+        },
+      }),
+      [],
+    );
+
     if (!isVisible) return null;
 
     return (
-      <div className="dialog-overlay">
-        <div className="dialog-modal">
-          <div className="dialog-header">
+      <div style={styles.dialogOverlay}>
+        <div style={styles.dialogModal}>
+          <div style={styles.dialogHeader}>
             <h2>{title}</h2>
-            <button className="dialog-close-button" onClick={onClose}>
+            <button style={styles.dialogCloseButton} onClick={onClose}>
               &times;
             </button>
           </div>
-          <div className="dialog-content">{children}</div>
-          <div className="dialog-footer">
-            <button className="dialog-button" onClick={onClose}>
+          <div style={styles.dialogContent}>{children}</div>
+          <div style={styles.dialogFooter}>
+            <button style={styles.dialogButton} onClick={onClose}>
               Cancel
             </button>
             <button
-              className="dialog-button dialog-submit-button"
+              style={{ ...styles.dialogButton, ...styles.dialogSubmitButton }}
               onClick={onSubmit}
             >
               Submit

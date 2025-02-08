@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import '../css/QuestionGrid.css';
 import { IQuestion, IQuestionStatus } from '@/module/question';
+import '../css/QuestionGrid.css';
 
 interface QuestionGridProps {
   isDiscussion?: boolean;

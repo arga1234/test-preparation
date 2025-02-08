@@ -53,6 +53,14 @@ a {
   flex-direction: row;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-no-wrap {
+  flex-wrap: nowrap;
+}
+
 .flex-column {
   display: flex;
   flex-direction: column;
@@ -98,4 +106,12 @@ a {
 
 .mb-10 {
   margin-bottom: 10px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.mt-10 {
+  margin-top: 10px;
 }

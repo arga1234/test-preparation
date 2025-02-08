@@ -1,5 +1,5 @@
-import { QuestionContainer } from './question';
+import { TryoutContainer } from './tryout';
 
 export class ModuleContainer {
-  questionContainer = new QuestionContainer();
+  tryoutContainer = new TryoutContainer();
 }

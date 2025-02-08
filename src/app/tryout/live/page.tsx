@@ -15,8 +15,8 @@ const TryoutLivePage = () => {
   const searchParam = useSearchParams();
 
   //memo
-  const { questionController } = useMemo(() => {
-    return new ModuleContainer().questionContainer;
+  const { tryoutController } = useMemo(() => {
+    return new ModuleContainer().tryoutContainer;
   }, []);
 
   //methods
@@ -58,13 +58,13 @@ const TryoutLivePage = () => {
   );
   const onQuestionCollectionRequest = useCallback(() => {
     if (testId) {
-      questionController()
-        .getQuestionCollection(testId)
+      tryoutController()
+        .getTryoutTest(testId)
         .then((res) => {
           setQuesctionCollection(res);
         });
     }
-  }, [questionController, testId]);
+  }, [tryoutController, testId]);
 
   //useEffect
   useEffect(() => {
@@ -166,11 +166,6 @@ const TryoutLivePage = () => {
             style={{ marginBottom: '10px' }}
             text="Akhiri Pengerjaan"
             className="primary"
-            disabled={
-              selectedIndex === quesctionCollection.questions.length - 1
-                ? true
-                : false
-            }
             onClick={() => {
               onQuestionClick(question.number);
             }}

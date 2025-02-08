@@ -6,3 +6,4 @@ export * from './Dialog.component';
 export * from './DialogButton.component';
 export * from './Card.component';
 export * from './Header.component';
+export * from './CardV2.component';
