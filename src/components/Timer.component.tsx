@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 
 interface TimerProps {
-  initialTime: number; // Waktu awal dalam detik
-  mode: 'countUp' | 'countDown' | 'stay'; // Mode: hitung maju/mundur/tetap
-  onEnd?: () => void; // Callback ketika waktu habis (untuk hitung mundur)
-  storageKey: string; // Key untuk menyimpan data di localStorage
-  label?: string;
   id: string;
+  mode: 'countUp' | 'countDown' | 'stay';
+  initialTime: number;
+  storageKey: string;
+  onEnd?: () => void;
+  label?: string;
 }
 
 const Timer: React.FC<TimerProps> = React.memo(
