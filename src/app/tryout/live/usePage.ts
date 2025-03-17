@@ -13,56 +13,46 @@ export const usePage = () => {
   const searchParam = useSearchParams();
 
   //memo
-  const { tryoutController } = useMemo(() => {
-    return new ModuleContainer().tryoutContainer;
+  const { tryoutContainer, questionContainer } = useMemo(() => {
+    return new ModuleContainer();
   }, []);
 
   //methods
   const onOptionSelect = useCallback(
     (optionId: string) => {
-      if (quesctionCollection) {
-        const qc = quesctionCollection.updateCollection({
-          index: selectedIndex,
-          selectedOption: optionId,
-          status: 'answered',
-          testId,
+      questionContainer
+        .questionController()
+        .onOptionClick(optionId, quesctionCollection, selectedIndex, testId)
+        .then(({ q, qc }) => {
+          setQuesctionCollection(qc);
+          setQuestion(q);
         });
-        setQuesctionCollection(qc);
-        setQuestion(qc.getByIndex(selectedIndex));
-      }
     },
-    [quesctionCollection, testId, selectedIndex],
+    [questionContainer, quesctionCollection, selectedIndex, testId],
   );
   const onQuestionClick = useCallback(
     (index?: number) => {
-      if (quesctionCollection) {
-        const qc = quesctionCollection.activateSelectedQuestion(
-          index ? index : 0,
-        );
-        const q = qc.getByIndex(index ? index : 0);
-        const duration = localStorage.getItem(`${testId}-duration`);
-        setQuesctionCollection(
-          qc.updateCollection({
-            index: selectedIndex, // selectedIndex should be the previous index incase to update the previous question duration
-            duration,
-            testId,
-          }),
-        );
-        setQuestion(q);
-        setSelectedIndex(index);
-      }
+      questionContainer
+        .questionController()
+        .onQuestionClick(selectedIndex, testId, quesctionCollection, index)
+        .then(({ q, qc }) => {
+          setQuesctionCollection(qc);
+          setQuestion(q);
+          setSelectedIndex(index);
+        });
     },
-    [quesctionCollection, selectedIndex, testId],
+    [quesctionCollection, questionContainer, selectedIndex, testId],
   );
   const onQuestionCollectionRequest = useCallback(() => {
     if (testId) {
-      tryoutController()
+      tryoutContainer
+        .tryoutController()
         .getTryoutTest(testId)
         .then((res) => {
           setQuesctionCollection(res);
         });
     }
-  }, [tryoutController, testId]);
+  }, [tryoutContainer, testId]);
 
   //hooks
   useEffect(() => {

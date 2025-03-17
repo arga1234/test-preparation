@@ -62,11 +62,19 @@ export const usePage = () => {
   //hooks
   useEffect(() => {
     setSelectedIndex(0);
-    getSearchParams();
-    onQuestionCollectionRequest();
-    setQuestionCollection();
-  }, [getSearchParams, onQuestionCollectionRequest, setQuestionCollection]);
+  }, []);
 
+  useEffect(() => {
+    getSearchParams();
+  }, [getSearchParams]);
+
+  useEffect(() => {
+    onQuestionCollectionRequest();
+  }, [onQuestionCollectionRequest]);
+
+  useEffect(() => {
+    setQuestionCollection();
+  }, [setQuestionCollection]);
   return {
     onQuestionClick,
     testId,

@@ -16,4 +16,12 @@ export class QuestionController {
       selectedIndex,
     );
   };
+  onOptionClick = (
+    optionId: string,
+    qc?: QuestionCollection,
+    selectedIndex?: number,
+    testId?: string,
+  ) => {
+    return this.uc.onOptionSelect(optionId, qc, selectedIndex, testId);
+  };
 }
