@@ -4,16 +4,13 @@ import { ITryoutCategoryDto } from '@/module/tryout';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const usePage = () => {
-  const router = useRouter();
+  //state
   const [state, setState] = useState<ITryoutCategoryDto[]>();
 
-  const goToPage = useCallback(
-    (id: string) => {
-      router.push(`/tryout/list?id=${id}`);
-    },
-    [router],
-  );
+  //hooks
+  const router = useRouter();
 
+  //memo
   const style = useMemo(
     () => ({
       page: {
@@ -28,6 +25,15 @@ const usePage = () => {
     return new ModuleContainer().tryoutContainer.tryoutController();
   }, []);
 
+  //method
+  const goToPage = useCallback(
+    (id: string) => {
+      router.push(`/tryout/list?id=${id}`);
+    },
+    [router],
+  );
+
+  //hooks
   useEffect(() => {
     getTryoutCategory()
       .then((res) => {

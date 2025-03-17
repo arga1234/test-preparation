@@ -1,16 +1,19 @@
+import { QuestionCollection } from '../entity';
 import { IQuestionUsecase } from '../usecase';
 
 export class QuestionController {
   constructor(private uc: IQuestionUsecase) {}
-  getQuestionCollection = (id: string) => {
-    return this.uc.getQuestionCollection(id);
-  };
-
-  getUserAnsweredQuestionCollection = (testId: string, tryId: string) => {
-    return this.uc.getUserAnsweredQuestionCollection(testId, tryId);
-  };
-
-  reportQuestion = (testId: string, id: string) => {
-    return this.uc.reportQuestion(testId, id);
+  onQuestionClick = (
+    previuosIndex?: number,
+    testId?: string,
+    quesctionCollection?: QuestionCollection,
+    selectedIndex?: number,
+  ) => {
+    return this.uc.onQuestionClick(
+      previuosIndex,
+      testId,
+      quesctionCollection,
+      selectedIndex,
+    );
   };
 }

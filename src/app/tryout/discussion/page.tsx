@@ -1,85 +1,17 @@
 'use client';
 
 import { QuestionGrid, Question, Timer, ButtonComponent } from '@/components';
-import { ModuleContainer } from '@/module';
-import { IQuestion, QuestionCollection } from '@/module/question';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React from 'react';
+import { usePage } from './usePage';
 
 const DiscussionPage = () => {
-  //states
-  const [quesctionCollection, setQuesctionCollection] =
-    useState<QuestionCollection>();
-  const [question, setQuestion] = useState<IQuestion>();
-  const [testId, setTestId] = useState<string>();
-  const [tryId, setTryId] = useState<string>();
-  const [selectedIndex, setSelectedIndex] = useState<number>();
-  const searchParam = useSearchParams();
-
-  //memo
-  const { tryoutController } = useMemo(() => {
-    return new ModuleContainer().tryoutContainer;
-  }, []);
-
-  //methods
-  const onQuestionClick = useCallback(
-    (index?: number) => {
-      if (quesctionCollection) {
-        const qc = quesctionCollection.activateSelectedQuestion(
-          index ? index : 0,
-        );
-        const q = qc.getByIndex(index ? index : 0);
-        const duration = localStorage.getItem(`${testId}-duration`);
-        setQuesctionCollection(
-          qc.updateCollection(
-            {
-              index: selectedIndex, // selectedIndex should be the previous index incase to update the previous question duration
-              duration,
-              testId,
-            },
-            true,
-          ),
-        );
-        setQuestion(q);
-        setSelectedIndex(index);
-      }
-    },
-    [quesctionCollection, selectedIndex, testId],
-  );
-  const onQuestionCollectionRequest = useCallback(() => {
-    if (testId && tryId) {
-      tryoutController()
-        .getTryoutAnswerByTryId(testId, tryId)
-        .then((res) => {
-          setQuesctionCollection(res);
-        });
-    }
-  }, [tryoutController, testId, tryId]);
-
-  //useEffect
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, []);
-
-  useEffect(() => {
-    const testId = searchParam.get('testId');
-    const tryId = searchParam.get('tryId');
-    setTestId(testId || undefined);
-    setTryId(tryId || undefined);
-  }, [searchParam]);
-
-  useEffect(() => {
-    onQuestionCollectionRequest();
-  }, [onQuestionCollectionRequest]);
-
-  useEffect(() => {
-    if (question === undefined && quesctionCollection) {
-      const qs = quesctionCollection.activateSelectedQuestion(0);
-      setQuesctionCollection(qs);
-      setQuestion(qs.getByIndex(selectedIndex));
-    }
-  }, [question, quesctionCollection, selectedIndex]);
-
+  const {
+    onQuestionClick,
+    testId,
+    quesctionCollection,
+    question,
+    selectedIndex,
+  } = usePage();
   return (
     quesctionCollection &&
     question &&
