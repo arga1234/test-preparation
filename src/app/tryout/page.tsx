@@ -7,8 +7,8 @@ const TryoutCategoryPage: React.FC = React.memo(() => {
   const { style, state, goToPage } = usePage();
   return (
     <div style={style.page}>
-      <Header title="Try Out Category" subtitle="Pilih kategori tryout" />
-      <div style={{ gap: '10px' }} className="flex-row">
+      <Header title="Try Out" subtitle="Pilih kategori tryout" />
+      <div style={{ gap: '10px', flexWrap: 'wrap' }} className="flex-row">
         {state &&
           state.map((el, index) => (
             <Card

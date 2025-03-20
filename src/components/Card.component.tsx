@@ -24,10 +24,10 @@ export const Card: React.FC<CardProps> = React.memo(
           justifyContent: 'space-between',
           boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
           transition: 'transform 0.2s ease-in-out',
-          width: '100%',
           color: 'white',
           cursor: 'pointer',
           gap: '10px',
+          flexGrow: 1,
         },
         cardHover: {
           transform: 'translateY(-5px)',

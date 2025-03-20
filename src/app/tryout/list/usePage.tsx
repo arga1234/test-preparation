@@ -1,7 +1,7 @@
 import { ModuleContainer } from '@/module';
 import { ITryoutItemDto } from '@/module/tryout';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { CSSProperties, useEffect, useMemo, useState } from 'react';
 
 export const usePage = () => {
   //state
@@ -11,8 +11,9 @@ export const usePage = () => {
   const style = useMemo(
     () => ({
       page: {
-        minHeight: '100vh',
         padding: '32px',
+        display: 'flex',
+        flexDirection: 'column' as CSSProperties['flexDirection'],
       },
     }),
     [],

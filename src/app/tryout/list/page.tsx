@@ -8,7 +8,7 @@ const TryoutListPage: React.FC = React.memo(() => {
   return (
     <div style={style.page}>
       <Header title="Try Out List" subtitle="Pilih tryout" />
-      <div style={{ gap: '10px' }} className="flex-row">
+      <div style={{ gap: '10px', flexWrap: 'wrap' }} className="flex-row">
         {state &&
           state.map((el, index) => (
             <CardV2

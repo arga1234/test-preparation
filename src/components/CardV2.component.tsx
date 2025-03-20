@@ -23,9 +23,9 @@ const CardV2 = React.memo(
           color: '#FFF',
           padding: '16px',
           borderRadius: '8px',
-          width: '320px',
           boxShadow: '0px 4px 8px rgba(0,0,0,0.2)',
           transition: 'transform 0.2s ease-in-out',
+          flexGrow: 1,
         },
         header: { display: 'flex', alignItems: 'center' },
         iconContainer: {
@@ -49,7 +49,11 @@ const CardV2 = React.memo(
           gap: '10px',
         },
         detailText: { color: '#FFF' },
-        buttonContainer: { display: 'flex', justifyContent: 'space-between' },
+        buttonContainer: {
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '10px',
+        },
         button: {
           flex: 1,
           backgroundColor: '#FFF',
@@ -80,13 +84,13 @@ const CardV2 = React.memo(
             </div>
           </div>
         </div>
-        <div style={styles.ratingContainer}>
+        {/* <div style={styles.ratingContainer}>
           <span style={styles.star}>★</span>
           <span style={styles.rating}>{rating}</span>
           <a href="#" style={styles.reviews}>
             {reviews} review
           </a>
-        </div>
+        </div> */}
         <div style={styles.buttonContainer}>
           <button style={styles.button}>Kerjakan</button>
           <button style={styles.button}>Leaderboard</button>
